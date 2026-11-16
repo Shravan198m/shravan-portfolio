@@ -1,0 +1,613 @@
+{
+  "revision": 9,
+  "profile": {
+    "name": "Shravan V Moodlu",
+    "shortName": "SVM",
+    "role": "Software engineer. Visual storyteller.",
+    "location": "Sagara, Karnataka, India",
+    "kicker": "A curious mind. An original broadcast.",
+    "homeTitle": "The Shravan Show",
+    "homeSubtitle": "Software engineer. Visual storyteller.",
+    "portrait": "/assets/hero-campaign-v2.png",
+    "resume": "/assets/Shravan-V-Moodlu-Resume.pdf",
+    "footer": "SHRAVAN V MOODLU / MADE WITH INTENT"
+  },
+  "appearance": {
+    "wallImage": "/assets/retro-room.png",
+    "posterLeft": "",
+    "posterRight": "",
+    "accent": "#bb482c",
+    "cream": "#ead4a7",
+    "ink": "#252b26",
+    "teal": "#315653",
+    "wood": "#643920",
+    "buttonColor": "#bc9c61",
+    "screenColor": "#e4c998",
+    "fontFamily": "retro",
+    "scanlines": true,
+    "transitionMs": 450,
+    "soundEnabled": false
+  },
+  "channels": [
+    {
+      "id": "home",
+      "label": "Home",
+      "subtitle": "Code × camera",
+      "color": "#d76b35",
+      "enabled": true
+    },
+    {
+      "id": "services",
+      "label": "Work with me",
+      "subtitle": "Ideas into useful work",
+      "color": "#826d48",
+      "enabled": true
+    },
+    {
+      "id": "work",
+      "label": "Engineering",
+      "subtitle": "Ideas, built into systems",
+      "color": "#dd9127",
+      "enabled": true
+    },
+    {
+      "id": "films",
+      "label": "Films",
+      "subtitle": "Behind the frame",
+      "color": "#ff6600",
+      "enabled": true
+    },
+    {
+      "id": "about",
+      "label": "About",
+      "subtitle": "The person behind the work",
+      "color": "#ad694e",
+      "enabled": true
+    },
+    {
+      "id": "skills",
+      "label": "The toolkit",
+      "subtitle": "From interface to infrastructure",
+      "color": "#9a8451",
+      "enabled": true
+    },
+    {
+      "id": "journey",
+      "label": "Journey",
+      "subtitle": "Built by doing",
+      "color": "#756483",
+      "enabled": true
+    },
+    {
+      "id": "contact",
+      "label": "Say hello",
+      "subtitle": "Let's make it matter",
+      "color": "#d76b35",
+      "enabled": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "glaucoma",
+      "number": "01",
+      "title": "Hybrid Glaucoma Screening",
+      "category": "HEALTHCARE AI",
+      "year": "2025—26",
+      "theme": "olive",
+      "icon": "eye",
+      "summary": "Two kinds of retinal evidence. One more considered decision.",
+      "description": "A hybrid screening approach that combines visual and structural retinal evidence, with a conformal safety net for uncertain cases.",
+      "role": "Team lead · Team of 4",
+      "tags": [
+        "ResNet-50",
+        "FastAPI",
+        "React"
+      ],
+      "metric": "87.21%",
+      "metricLabel": "FUSED TEST ACCURACY",
+      "overview": "I led a four-person team combining image-based and structural retinal features for glaucoma screening. Rather than forcing a prediction in every case, the system routes uncertain results for manual review.",
+      "approach": "Training used 7,618 retinal images. Evaluation on a separate 1,353-image test set reported a rise from 82.71% to 87.21% accuracy, with 89.57% sensitivity and 85.80% specificity. The uncertainty safeguard referred 26 cases (1.92%) for manual review.",
+      "note": "Academic project results from the supplied résumé; these are evaluation results, not a clinical validation claim.",
+      "flow": [
+        "Retinal input",
+        "Visual + structural features",
+        "Evidence fusion",
+        "Prediction / referral"
+      ],
+      "stack": [
+        "ResNet-50",
+        "TensorFlow",
+        "Keras",
+        "FastAPI",
+        "React",
+        "Conformal prediction"
+      ],
+      "links": [
+        {
+          "label": "View source",
+          "href": "https://github.com/Shravan198m/glaucoma_project"
+        },
+        {
+          "label": "Open demo",
+          "href": "https://glaucoma-kprx.vercel.app/"
+        }
+      ],
+      "thumbnail": "/assets/project-glaucoma.svg",
+      "enabled": true
+    },
+    {
+      "id": "interview",
+      "number": "02",
+      "title": "AI Interview Platform",
+      "category": "DISTRIBUTED SYSTEMS",
+      "year": "2025—26",
+      "theme": "rust",
+      "icon": "network",
+      "summary": "Six services. A connected interview experience.",
+      "description": "Interview orchestration, code execution and real-time computer-vision proctoring, built as a six-service system.",
+      "role": "Individual project",
+      "tags": [
+        "Next.js",
+        "YOLO",
+        "Redis"
+      ],
+      "metric": "06",
+      "metricLabel": "INDEPENDENT SERVICES",
+      "overview": "An individual full-stack project bringing interview workflows, live proctoring, evaluation and code execution together through a service-based architecture.",
+      "approach": "The platform separates authentication, interview orchestration, proctoring, evaluation, code execution and notifications. Computer-vision components use YOLO and MediaPipe; PostgreSQL and Redis support the application data and service workflows.",
+      "note": "The diagram summarises the service responsibilities described in my résumé; it is not a deployment topology.",
+      "flow": [
+        "Authentication",
+        "Orchestration",
+        "Proctoring",
+        "Evaluation",
+        "Code execution",
+        "Notifications"
+      ],
+      "stack": [
+        "Next.js",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "YOLO",
+        "MediaPipe",
+        "Docker"
+      ],
+      "links": [
+        {
+          "label": "View source",
+          "href": "https://github.com/Shravan198m/INTERVIEW-APPLICTION"
+        },
+        {
+          "label": "View demo files",
+          "href": "https://drive.google.com/drive/folders/1gdI7vjtrOWVZarVuTRNYMzxSeXhls47B?usp=sharing"
+        }
+      ],
+      "thumbnail": "/assets/project-interview.svg",
+      "enabled": true
+    },
+    {
+      "id": "underwater",
+      "number": "03",
+      "title": "Underwater Image Enhancement",
+      "category": "REINFORCEMENT LEARNING",
+      "year": "2025",
+      "theme": "teal",
+      "icon": "waves",
+      "summary": "Learning to see beneath the surface.",
+      "description": "A physics-informed DQN learns a sequence of image corrections to recover visibility and colour.",
+      "role": "Team of 3",
+      "tags": [
+        "PyTorch",
+        "DQN",
+        "OpenCV"
+      ],
+      "metric": "+43.3%",
+      "metricLabel": "UIQM IMPROVEMENT",
+      "overview": "A team project exploring how reinforcement learning can select image corrections rather than relying on one fixed enhancement pipeline.",
+      "approach": "A 10-dimensional visual state informs a Deep Q-Network. Available corrections include white balance, CLAHE, gamma correction, denoising, dehazing and colour compensation. On 649 test images, UIQM improved from 46.43 to 66.55 (+43.3%), and UCIQE from 24.36 to 29.70 (+21.9%).",
+      "note": "Reported image-quality metrics are from the supplied résumé and apply to the evaluated test set.",
+      "flow": [
+        "Underwater image",
+        "Visual state",
+        "DQN correction policy",
+        "Enhanced image"
+      ],
+      "stack": [
+        "PyTorch",
+        "Deep Q-Network",
+        "OpenCV",
+        "Image processing"
+      ],
+      "links": [
+        {
+          "label": "View source",
+          "href": "https://github.com/sumukha2005/underwaterImageEnhancement"
+        },
+        {
+          "label": "View sample images",
+          "href": "https://drive.google.com/drive/folders/13UpTWRZlys0oKSBlAFsi__--NlRc3uqf?usp=drive_link"
+        }
+      ],
+      "thumbnail": "/assets/project-underwater.svg",
+      "enabled": true
+    },
+    {
+      "id": "aarogya",
+      "number": "04",
+      "title": "AarogyaLink",
+      "category": "DIGITAL HEALTH CONCEPT",
+      "year": "2025",
+      "theme": "plum",
+      "icon": "cross",
+      "summary": "Healthcare information, connected with care.",
+      "description": "An ideathon concept for secure healthcare records, verified access and offline-first synchronisation.",
+      "role": "Team lead · MITE First Ideathon",
+      "tags": [
+        "Flutter",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "metric": "01",
+      "metricLabel": "IDEATHON CONCEPT",
+      "overview": "I led the AarogyaLink presentation at the MITE First Ideathon, exploring a connected approach to healthcare records and role-aware access.",
+      "approach": "The concept brings together verified roles, encrypted sharing, emergency access and offline-first synchronisation. Flutter, Node.js and PostgreSQL form the proposed technology direction recorded in the existing portfolio.",
+      "note": "Presented as an ideathon concept. The listed capabilities describe the proposal, not a deployed healthcare service.",
+      "flow": [
+        "Verified roles",
+        "Healthcare records",
+        "Controlled sharing",
+        "Offline sync"
+      ],
+      "stack": [
+        "Flutter (proposed)",
+        "Node.js (proposed)",
+        "PostgreSQL (proposed)"
+      ],
+      "links": [],
+      "thumbnail": "/assets/project-aarogya.svg",
+      "enabled": true
+    },
+    {
+      "id": "labcode",
+      "number": "05",
+      "title": "LabCode",
+      "category": "ACADEMIC PLATFORM",
+      "year": "ONGOING",
+      "theme": "sand",
+      "icon": "code",
+      "summary": "From a submission to a meaningful result.",
+      "description": "Backend workflows for programming problems, submissions, evaluations and marks across academic domains.",
+      "role": "Backend contributor · Team of 3",
+      "tags": [
+        "REST APIs",
+        "Validation",
+        "Testing"
+      ],
+      "metric": "IN BUILD",
+      "metricLabel": "ONGOING PROJECT",
+      "overview": "An ongoing three-person project supporting programming practice and evaluation through structured academic workflows.",
+      "approach": "My work covers problem and submission management, DTO validation, evaluation and marks, academic domain modelling, and unit and integration testing. The focus is a backend that is understandable and reliable as the workflows grow.",
+      "note": "Ongoing work. No production adoption or completion figures are claimed.",
+      "flow": [
+        "Problem",
+        "Submission",
+        "Validation + evaluation",
+        "Marks"
+      ],
+      "stack": [
+        "REST APIs",
+        "DTO validation",
+        "Domain modelling",
+        "Unit tests",
+        "Integration tests"
+      ],
+      "links": [
+        {
+          "label": "View source",
+          "href": "https://github.com/sumukha2005/LabCode"
+        }
+      ],
+      "thumbnail": "/assets/project-labcode.svg",
+      "enabled": true
+    }
+  ],
+  "films": [
+    {
+      "title": "Offline",
+      "role": "Shoot · Edit",
+      "duration": "00:19",
+      "file": "/assets/film-01-offline.mp4",
+      "poster": "/assets/film-01-offline-poster.jpg",
+      "format": "Portrait",
+      "alt": "Stone path under an overcast sky",
+      "id": "film-01",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "College Stage",
+      "role": "Event · Behind the scenes",
+      "duration": "00:33",
+      "file": "/assets/film-02-stage.mp4",
+      "poster": "/assets/film-02-stage-poster.jpg",
+      "format": "Landscape",
+      "alt": "Performers on a college stage",
+      "id": "film-02",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "Kitchen Study",
+      "role": "Shoot · Behind the scenes",
+      "duration": "00:16",
+      "file": "/assets/film-03-kitchen.mp4",
+      "poster": "/assets/film-03-kitchen-poster.jpg",
+      "format": "Landscape",
+      "alt": "A food preparation scene in a kitchen",
+      "id": "film-03",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "Field Notes",
+      "role": "Shoot · Documentary",
+      "duration": "01:02",
+      "file": "/assets/film-04-field.mp4",
+      "poster": "/assets/film-04-field-corrected-poster.jpg",
+      "format": "Landscape",
+      "alt": "A frame from the Field Notes film",
+      "id": "film-04",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "Exhausted",
+      "role": "Act · Edit",
+      "duration": "01:05",
+      "file": "/assets/film-05-exhausted.mp4",
+      "poster": "/assets/film-05-exhausted-poster.jpg",
+      "format": "Landscape",
+      "alt": "A person working at a desk at night",
+      "id": "film-05",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "Exhausted / Cut",
+      "role": "Edit · Alternate cut",
+      "duration": "00:11",
+      "file": "/assets/film-06-corrected.mp4",
+      "poster": "/assets/film-06-corrected.jpg",
+      "format": "Landscape",
+      "alt": "A blue-lit workstation from the alternate cut of Exhausted",
+      "id": "film-06",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "title": "Club Production",
+      "role": "Act · Behind the scenes",
+      "duration": "00:29",
+      "file": "/assets/film-07-corrected.mp4",
+      "poster": "/assets/film-07-corrected.jpg",
+      "format": "Landscape",
+      "alt": "Two club members wearing sunglasses during a production",
+      "id": "film-07",
+      "description": "",
+      "enabled": true
+    }
+  ],
+  "about": {
+    "title": "Curiosity is the common thread.",
+    "intro": "I build where ideas meet engineering.",
+    "paragraphs": [
+      "I'm a full-stack developer and AI/ML builder working across backend architecture, distributed systems, product interfaces and computer vision.",
+      "I like understanding the problem deeply, then finding a clear, dependable way forward. Outside the code, I explore that same process through a camera, a performance or an edit.",
+      "Through Captcha and Pixel, I contribute across the production process—from performance and the shoot to behind-the-scenes capture and the edit."
+    ],
+    "portrait": "/assets/hero-campaign-v2.png",
+    "signature": "/assets/signature-transparent-v2.png"
+  },
+  "skills": [
+    {
+      "title": "Backend engineering",
+      "description": "Production APIs, authentication, validation, relational models and event-driven workflows designed for clarity under growth.",
+      "tools": [
+        "Node.js",
+        "FastAPI",
+        "Express",
+        "PostgreSQL",
+        "Prisma",
+        "Redis",
+        "Socket.IO"
+      ]
+    },
+    {
+      "title": "AI & computer vision",
+      "description": "Research-minded models carried into usable applications, with evaluation, safeguards and understandable outputs.",
+      "tools": [
+        "PyTorch",
+        "TensorFlow",
+        "Keras",
+        "OpenCV",
+        "YOLO",
+        "MediaPipe",
+        "ResNet-50"
+      ]
+    },
+    {
+      "title": "Product development",
+      "description": "Responsive web products, multi-tenant workflows and role-aware interfaces connected to dependable service layers.",
+      "tools": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "REST",
+        "JWT",
+        "Real-time UX"
+      ]
+    },
+    {
+      "title": "Quality & delivery",
+      "description": "Testing and deployment practices that make complex systems safer to change and easier to inspect.",
+      "tools": [
+        "Docker",
+        "Playwright",
+        "Unit tests",
+        "Integration tests",
+        "Git",
+        "CI/CD"
+      ]
+    }
+  ],
+  "journey": [
+    {
+      "period": "FEB 2026 — PRESENT",
+      "title": "Software Developer Intern",
+      "organization": "Shiktra Technologies LLP",
+      "description": "Building full-stack product workflows across React, Node.js, FastAPI, PostgreSQL, real-time updates and automated testing.",
+      "type": "Experience"
+    },
+    {
+      "period": "2023 — 2027",
+      "title": "B.E. Information Science & Engineering",
+      "organization": "Mangalore Institute of Technology & Engineering",
+      "description": "CGPA 8.38 / 10. Exploring software engineering, machine learning, computer vision and system design.",
+      "type": "Education"
+    },
+    {
+      "period": "BEYOND THE CLASSROOM",
+      "title": "Team lead. Core member.",
+      "organization": "MITE First Ideathon · Pixel Club",
+      "description": "Leading AarogyaLink's ideathon presentation and contributing to workshops, coding events, hackathons and peer learning.",
+      "type": "Leadership"
+    },
+    {
+      "period": "CONTINUOUS LEARNING",
+      "title": "Learning, then applying.",
+      "organization": "NPTEL Elite · Oracle AI Foundations",
+      "description": "Soft computing, cloud AI fundamentals and applied GenAI data analytics.",
+      "type": "Certifications"
+    }
+  ],
+  "contact": {
+    "title": "A good idea starts with a hello.",
+    "description": "A problem worth solving. A story worth telling. I'd love to hear what you have in mind.",
+    "email": "svmoodlu198@gmail.com",
+    "github": "https://github.com/Shravan198m",
+    "linkedin": "https://www.linkedin.com/in/shravan-v-moodlu-a19a582a5/",
+    "resume": "/assets/Shravan-V-Moodlu-Resume.pdf",
+    "label": "Let's talk"
+  },
+  "posters": [
+    {
+      "title": "BUILT / NOT BOUGHT",
+      "subtitle": "SOFTWARE / AI / SYSTEMS",
+      "image": "",
+      "channel": "work",
+      "enabled": true
+    },
+    {
+      "title": "PICTURES / IN MOTION",
+      "subtitle": "ACT / SHOOT / CAPTURE / EDIT",
+      "image": "",
+      "channel": "films",
+      "enabled": true
+    }
+  ],
+  "quotes": [
+    {
+      "id": "quote-1",
+      "text": "Begin with curiosity. Keep going with care.",
+      "side": "left",
+      "duration": 12,
+      "frame": "wood",
+      "font": "serif",
+      "color": "#35291d",
+      "background": "#e7d5ad",
+      "fontSize": 24,
+      "enabled": true
+    },
+    {
+      "id": "quote-2",
+      "text": "Small steps become work worth sharing.",
+      "side": "right",
+      "duration": 10,
+      "frame": "brass",
+      "font": "serif",
+      "color": "#35291d",
+      "background": "#e7d5ad",
+      "fontSize": 24,
+      "enabled": true
+    },
+    {
+      "id": "quote-3",
+      "text": "Make something useful. Make it your own.",
+      "side": "left",
+      "duration": 10,
+      "frame": "wood",
+      "font": "serif",
+      "color": "#35291d",
+      "background": "#e7d5ad",
+      "fontSize": 24,
+      "enabled": true
+    },
+    {
+      "id": "quote-4",
+      "text": "The next good idea starts with a question.",
+      "side": "right",
+      "duration": 10,
+      "frame": "brass",
+      "font": "serif",
+      "color": "#35291d",
+      "background": "#e7d5ad",
+      "fontSize": 24,
+      "enabled": true
+    }
+  ],
+  "services": [
+    {
+      "title": "Websites with a clear purpose",
+      "description": "Responsive portfolio and business websites, with thoughtful design and a practical editing workflow. We agree the pages and features before building."
+    },
+    {
+      "title": "Software and AI prototypes",
+      "description": "I build web applications and explore AI features where they solve a real problem. A small prototype helps us test an idea before committing to a larger build."
+    },
+    {
+      "title": "Visual storytelling",
+      "description": "Video editing and creative presentation for ideas that need a visual voice. We start with your audience, references and the message you want to communicate."
+    },
+    {
+      "title": "A straightforward process",
+      "description": "We discuss the brief, agree scope and milestones, review the first version together, then test and hand over the work. Send your idea, timeline and priorities to start the conversation."
+    }
+  ],
+  "reviews": [
+    {
+      "id": "sample-review-ai",
+      "text": "Sample wording — In a world where AI can produce something quickly, the creative thinking behind a project still matters. What stood out here was the way Shravan questioned the obvious approach and found a clearer, more human way to present the idea.",
+      "attribution": "SAMPLE ONLY — replace with a real client’s words",
+      "enabled": false
+    },
+    {
+      "id": "sample-review-process",
+      "text": "Sample wording — The process felt thoughtful from the first conversation. Shravan listened to what we actually needed, explained the trade-offs in plain language, and kept the work moving without making us chase for updates.",
+      "attribution": "SAMPLE ONLY — replace with a real client’s words",
+      "enabled": false
+    },
+    {
+      "id": "sample-review-craft",
+      "text": "Sample wording — The final result had a level of care we noticed in the small details: how the pages read, how they behaved on a phone, and how the visuals supported the message. It felt made for our project rather than pulled from a template.",
+      "attribution": "SAMPLE ONLY — replace with a real client’s words",
+      "enabled": false
+    },
+    {
+      "id": "sample-review-delivery",
+      "text": "Sample wording — We appreciated the combination of technical ability and visual judgment. When a detail was not working, Shravan did not simply defend it; he tried another approach and helped us see why it worked better.",
+      "attribution": "SAMPLE ONLY — replace with a real client’s words",
+      "enabled": false
+    }
+  ]
+}

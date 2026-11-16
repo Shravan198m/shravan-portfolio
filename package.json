@@ -1,0 +1,11 @@
+{
+  "name": "svm-portfolio-console",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check tv.js && node --check intro.js && node --check sound-engine.js && node --check admin.js && node --check login.js && node --check auth.mjs && node --check server.mjs",
+    "test": "node --test qa/api.test.mjs"
+  }
+}

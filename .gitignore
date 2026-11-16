@@ -1,0 +1,26 @@
+# Modern Showcase Portfolio (explicitly excluded from Git per user instruction)
+web/
+
+# Temporary directories and QA artifacts
+tmp/
+*.log
+.DS_Store
+Thumbs.db
+
+# Workspace & internal agent tooling
+.agents/
+rea.cmd
+rea.ps1
+83763b0e-3ba7-405c-9d68-8378cd4f2960.png
+admin-cms-architecture (1).md
+AGENTS.md
+Shravan V Moodlu.pdf
+
+# CMS security & local runtime storage
+storage/admin-auth.json
+storage/backups/
+storage/*.lock
+qa/cms-api-fixture-*/
+
+# Node dependencies (if created)
+node_modules/

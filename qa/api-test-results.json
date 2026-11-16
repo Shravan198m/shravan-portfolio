@@ -1,0 +1,21 @@
+{
+  "passed": 15,
+  "checks": [
+    "seed content and admin routing",
+    "save increments revision and retains previous backup",
+    "saved data survives server restart; session token rotates",
+    "stale revision and concurrent edit conflict prevent lost updates",
+    "same-origin, token, cross-site and Host protections",
+    "malformed, oversized, and unsafe content rejected without revision changes",
+    "media upload persists bytes and supports listing/ranges",
+    "unsafe uploads rejected and temporary files cleaned",
+    "referenced uploads and original assets cannot be deleted",
+    "private files and traversal cannot be served",
+    "dead writer lock recovers and content is restored",
+    "quote frames and services seed without invented client reviews",
+    "quote appearance, order, services and unpublished feedback survive restart",
+    "invalid quote styling and feedback cannot change saved content",
+    "authentication protects studio and editing APIs"
+  ],
+  "scope": "Isolated fixture; live user content and media untouched."
+}

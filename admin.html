@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#222b25">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Control Room — Portfolio Editor</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin.css">
+  <script type="module" src="/admin.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#editor">Skip to editor</a>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="editor-brand" href="/admin" aria-label="Portfolio control room"><span class="brand-symbol">✳</span><span>Control Room<small>YOUR PORTFOLIO, ON AIR.</small></span></a>
+      <div class="local-label"><i></i>LOCAL WORKSPACE</div>
+      <nav id="section-nav" aria-label="Editor sections"></nav>
+      <div class="sidebar-bottom"><p>Make a change.<br>Make it yours.</p><span>Saved edits appear on your local TV portfolio.</span><a href="/" target="_blank" rel="noopener">Open the television <b>↗</b></a></div>
+    </aside>
+    <div class="workspace">
+      <header class="editor-toolbar"><div class="toolbar-title"><span class="eyebrow">PORTFOLIO STUDIO</span><span id="save-state"><i></i>Connecting…</span></div><div class="toolbar-actions"><button class="button secondary" id="logout-button">Sign out</button><button class="button secondary" id="discard-button" disabled>Discard changes</button><a class="button preview-button" href="/" target="_blank" rel="noopener">Preview <span>↗</span></a><button class="button primary" id="save-button" disabled><span class="save-icon">↥</span> Save to portfolio</button></div></header>
+      <div class="notice" id="global-notice" role="status" hidden></div>
+      <main id="editor" tabindex="-1"><div class="loading-panel"><span class="loading-ring"></span><h1>Opening the control room.</h1><p>Loading your saved portfolio and media.</p></div></main>
+      <footer class="workspace-footer"><span id="revision-label">Local portfolio editor</span><span>EDIT → SAVE → ON AIR</span></footer>
+    </div>
+  </div>
+  <dialog id="media-dialog" class="media-dialog" aria-labelledby="media-title"><header class="dialog-header"><div><span class="eyebrow">YOUR ASSET COLLECTION</span><h2 id="media-title">Choose media</h2></div><button class="icon-button" data-dialog-close="media-dialog" aria-label="Close media library">×</button></header><div class="media-tools"><label class="search-field"><span>⌕</span><input id="media-search" type="search" placeholder="Search filenames" aria-label="Search media filenames"></label><select id="media-filter" aria-label="Filter media type"><option value="all">All media</option><option value="image">Images</option><option value="video">Videos</option><option value="document">Documents</option></select><label class="button primary upload-label" tabindex="0" role="button" id="picker-upload-button">Upload file <span>↑</span><input id="media-picker-upload" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif,video/mp4,video/webm,application/pdf" hidden></label></div><p class="media-help" id="media-help">Choose an existing file, or upload a new one. Uploads are stored locally.</p><div id="media-picker-grid" class="media-grid"></div><div id="media-picker-status" class="dialog-status" role="status"></div></dialog>
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title"><span class="confirm-mark">!</span><h2 id="confirm-title">Confirm action</h2><p id="confirm-description"></p><div class="confirm-actions"><button class="button secondary" id="confirm-cancel">Cancel</button><button class="button danger" id="confirm-accept">Confirm</button></div></dialog>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+  <noscript><div class="noscript">The editor requires JavaScript. Enable it and reload to manage your portfolio.</div></noscript>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[
+  {
+    "start": 2,
+    "end": 4.79,
+    "duration": 2.79,
+    "text": "Some ideas begin quietly.",
+    "src": "/assets/audio/voice-01.m4a"
+  },
+  {
+    "start": 7,
+    "end": 11.32,
+    "duration": 4.32,
+    "text": "A question. A frame. A possibility.",
+    "src": "/assets/audio/voice-02.m4a"
+  },
+  {
+    "start": 12,
+    "end": 15.56,
+    "duration": 3.56,
+    "text": "Then curiosity becomes something you can see.",
+    "src": "/assets/audio/voice-03.m4a"
+  },
+  {
+    "start": 18,
+    "end": 21.93,
+    "duration": 3.93,
+    "text": "Built in code. Told in pictures.",
+    "src": "/assets/audio/voice-04.m4a"
+  },
+  {
+    "start": 23,
+    "end": 26.19,
+    "duration": 3.19,
+    "text": "Different ways of making an idea real.",
+    "src": "/assets/audio/voice-05.m4a"
+  },
+  {
+    "start": 27,
+    "end": 29.29,
+    "duration": 2.29,
+    "text": "Welcome to my world.",
+    "src": "/assets/audio/voice-06.m4a"
+  }
+]

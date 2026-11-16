@@ -1,0 +1,37 @@
+[
+  {
+    "brokenImages": [],
+    "height": 740,
+    "overflow": false,
+    "pageWidth": 305,
+    "width": 320
+  },
+  {
+    "brokenImages": [],
+    "height": 844,
+    "overflow": false,
+    "pageWidth": 375,
+    "width": 390
+  },
+  {
+    "brokenImages": [],
+    "height": 1024,
+    "overflow": false,
+    "pageWidth": 753,
+    "width": 768
+  },
+  {
+    "brokenImages": [],
+    "height": 1000,
+    "overflow": false,
+    "pageWidth": 1425,
+    "width": 1440
+  },
+  {
+    "brokenImages": [],
+    "height": 1080,
+    "overflow": false,
+    "pageWidth": 1905,
+    "width": 1920
+  }
+]
