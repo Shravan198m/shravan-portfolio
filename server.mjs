@@ -205,7 +205,7 @@ export async function createPortfolioServer({root=applicationRoot}={}) {
   });server.requestTimeout=120000;server.headersTimeout=15000;return server;
 }
 
-if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
+if(process.env.VERCEL !== '1' && process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const flag=process.argv.indexOf('--port'),requestedPort=Number(flag>=0?process.argv[flag+1]:4174);if(!Number.isInteger(requestedPort)||requestedPort<1024||requestedPort>65535)throw new Error('Choose a port between 1024 and 65535.');
   const server=await createPortfolioServer();let port=requestedPort;server.on('error',error=>{if(error.code==='EADDRINUSE'&&port<requestedPort+20&&port<65535)server.listen(++port,'127.0.0.1');else{console.error(error.message);process.exitCode=1;}});
   server.listen(port,'127.0.0.1',()=>console.log(`SVM Retro Portfolio\nLocal: http://127.0.0.1:${port}\nEditor: http://127.0.0.1:${port}/admin\nServing: ${applicationRoot}\nPress Ctrl+C to stop.`));
