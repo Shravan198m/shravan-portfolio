@@ -1,13 +1,33 @@
 {
+  "framework": null,
   "cleanUrls": true,
   "rewrites": [
     {
       "source": "/api/content",
-      "destination": "/api/content"
+      "destination": "/storage/content.json"
     },
     {
       "source": "/admin",
       "destination": "/admin.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/storage/content.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
     }
   ]
 }
