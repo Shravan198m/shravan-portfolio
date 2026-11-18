@@ -24,3 +24,6 @@ qa/cms-api-fixture-*/
 
 # Node dependencies (if created)
 node_modules/
+dist/
+.env
+.env.local

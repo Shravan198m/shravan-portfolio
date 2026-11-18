@@ -1,3 +1,5 @@
+import { upload as uploadToBlob } from 'https://esm.sh/@vercel/blob@2.9.0/client';
+
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -219,7 +221,8 @@ function mediaGrid(picker=false){
   return files.map(file=>{
     const index=mediaFiles.indexOf(file),url=assetURL(file.url),image=file.type.startsWith('image/'),video=file.type.startsWith('video/');
     const inside=`<div class="media-thumb">${image&&url?`<img src="${esc(url)}" alt="" loading="lazy">`:`<span class="media-type-icon" aria-hidden="true">${video?'▷':'▤'}</span>`}</div><div class="media-card-details"><strong>${esc(file.name)}</strong><small>${esc(file.type.split('/')[1].toUpperCase())} / ${fmtBytes(file.size)}</small></div>`;
-    return `<article class="media-card">${picker?`<button class="media-choice" data-pick-media="${index}" aria-label="Choose ${esc(file.name)}">${inside}</button>`:`<a class="media-choice" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Open ${esc(file.name)}">${inside}</a>`}<div class="media-card-footer"><span>${file.url.startsWith('/assets/uploads/')?'UPLOADED':'ORIGINAL'}</span>${picker?`<span class="eyebrow">SELECT ↑</span>`:`<button class="icon-button" data-copy-media="${index}" aria-label="Copy URL for ${esc(file.name)}">⧉</button>${file.url.startsWith('/assets/uploads/')?`<button class="icon-button danger-icon" data-delete-media="${index}" aria-label="Delete ${esc(file.name)}">×</button>`:''}`}</div></article>`;
+    const uploaded=file.uploaded||file.url.startsWith('/assets/uploads/');
+    return `<article class="media-card">${picker?`<button class="media-choice" data-pick-media="${index}" aria-label="Choose ${esc(file.name)}">${inside}</button>`:`<a class="media-choice" href="${esc(url)}" target="_blank" rel="noopener" aria-label="Open ${esc(file.name)}">${inside}</a>`}<div class="media-card-footer"><span>${uploaded?'UPLOADED':'ORIGINAL'}</span>${picker?`<span class="eyebrow">SELECT ↑</span>`:`<button class="icon-button" data-copy-media="${index}" aria-label="Copy URL for ${esc(file.name)}">⧉</button>${uploaded?`<button class="icon-button danger-icon" data-delete-media="${index}" aria-label="Delete ${esc(file.name)}">×</button>`:''}`}</div></article>`;
   }).join('');
 }
 async function refreshMedia(){mediaFiles=(await request('/api/media')).files;return mediaFiles;}
@@ -257,11 +260,13 @@ async function upload(file,picker=false){
   if(picker&&mediaTarget){const key=mediaTarget.split('.').at(-1),expected=key==='file'?'video/':key==='resume'?'application/pdf':'image/';if(!file.type.startsWith(expected)){status.textContent=`This field needs ${key==='file'?'a video':key==='resume'?'a PDF document':'an image'}.`;return;}}
   uploadBusy=true;updateChrome();status.textContent=`Uploading ${file.name} (${fmtBytes(file.size)})…`;
   try{
-    const created=await mutate('/api/media',{method:'POST',headers:{'Content-Type':file.type,'X-File-Name':encodeURIComponent(file.name)},body:file});
+    if(!token)await session();
+    const filename=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._ -]+/g,'-').replace(/\s+/g,'-').slice(0,100)||'media';
+    const created=await uploadToBlob(`svm-portfolio/uploads/${crypto.randomUUID()}-${filename}`,file,{access:'public',handleUploadUrl:'/api/media/upload',clientPayload:JSON.stringify({type:file.type}),headers:{'X-Admin-Token':token},multipart:file.size>4*1024*1024});
     await refreshMedia();
     uploadBusy=false;
-    if(picker&&mediaTarget){const target=mediaTarget;put(target,created.url);closeMedia();changed();renderPage();$$('[data-choose]').find(button=>button.dataset.choose===target)?.focus();notice(`Uploaded and selected ${created.name}. Save your changes to use it on the portfolio.`);}
-    else if(currentSection==='media'){$('#library-grid').innerHTML=mediaGrid();status.textContent=`Uploaded ${created.name}. ${mediaFiles.length} files in your library.`;}
+    if(picker&&mediaTarget){const target=mediaTarget;put(target,created.url);closeMedia();changed();renderPage();$$('[data-choose]').find(button=>button.dataset.choose===target)?.focus();notice(`Uploaded and selected ${created.pathname.split('/').at(-1)}. Save your changes to use it on the portfolio.`);}
+    else if(currentSection==='media'){$('#library-grid').innerHTML=mediaGrid();status.textContent=`Uploaded ${created.pathname.split('/').at(-1)}. ${mediaFiles.length} files in your library.`;}
   }catch(error){status.textContent=error.message;}
   finally{uploadBusy=false;updateChrome();}
 }

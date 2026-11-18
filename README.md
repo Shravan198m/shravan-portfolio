@@ -43,6 +43,17 @@ Five engineering projects and seven films are retained. AarogyaLink remains iden
 
 `npm run check` validates JavaScript syntax. `npm test` runs 12 isolated integration checks covering save/restart persistence, concurrent edits, upload handling, byte ranges and server protections, including login, session revocation, logout and rate limiting. See `qa/retro-verification.md` for browser checks. The original 25 file hashes are recorded in `qa/original-hashes.json`.
 
+## Deploy to Vercel
+
+The local server is for editing on this computer. For Vercel, the project now builds a public `dist/` folder and uses a serverless API with Vercel Blob for saved content and new media. This keeps administrator changes after a deployment and lets the editor upload videos directly to Blob rather than to temporary server storage.
+
+1. Push this folder to a private GitHub repository, then import that repository in Vercel.
+2. In the Vercel project, create and connect a **Blob** store. Vercel adds `BLOB_READ_WRITE_TOKEN` automatically.
+3. Add `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and a unique `ADMIN_SESSION_SECRET` of at least 32 characters in Project Settings → Environment Variables. Apply each to Production, Preview, and Development. The password belongs only in Vercel; it is never committed to this repository.
+4. Deploy. The first request reads the current portfolio as the initial seed. The first Save to portfolio stores the editable content in Blob. Later saves and uploaded assets persist independently of future deployments.
+
+Use `/admin` on the deployed domain to sign in. Keep the Vercel project private until the environment variables and Blob store are configured. `.env.example` lists the required names without secrets.
+
 ## Cinematic entrance and cabinet controls (November 2026)
 
 The opening is a 7-second browser animation of original photographic-style artwork: a room, viewer on a beanbag, slow camera push, phosphor warm-up and SVM presents titles. It is not filmed footage or generated full-motion human video. It plays once per browser-tab session, can be skipped with Enter the room or Escape, and replayed using Opening film. Reduced-motion users enter directly. No audio autoplays.

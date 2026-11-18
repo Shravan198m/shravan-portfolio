@@ -1,11 +1,8 @@
 {
-  "outputDirectory": ".",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/api/content",
-      "destination": "/storage/content.json"
-    },
     {
       "source": "/admin",
       "destination": "/admin.html"
@@ -13,21 +10,22 @@
   ],
   "headers": [
     {
-      "source": "/storage/content.json",
+      "source": "/(.*\\.(?:js|css|html))",
       "headers": [
         {
-          "key": "Content-Type",
-          "value": "application/json"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         },
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "no-store"
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/[...route].mjs": {
+      "includeFiles": "storage/content.json"
+    }
+  }
 }
