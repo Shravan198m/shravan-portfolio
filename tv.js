@@ -2,7 +2,7 @@ const $ = (selector,root=document) => root.querySelector(selector);
 const $$ = (selector,root=document) => [...root.querySelectorAll(selector)];
 const esc = (value='') => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeUrl = (value='') => /^(https:\/\/|\/assets\/)/.test(value) ? value : '';
-const image = (src,alt='',className='') => safeUrl(src) ? `<img src="${esc(safeUrl(src))}" alt="${esc(alt)}" class="${className}">` : '';
+const image = (src,alt='',className='') => safeUrl(src) ? `<img src="${esc(safeUrl(src))}" alt="${esc(alt)}" class="${className}" loading="lazy" decoding="async">` : '';
 const num = n => String(n).padStart(2,'0');
 let content,channel='home',item=0,page=0,detail=false,playing=false,filmIntro=false,power=true,sound=false,transitionTimer,resizeTimer,fetching=false;
 let touchStart,soundChosen=false;
