@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/content",
+      "destination": "/api/content"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    }
+  ]
+}
