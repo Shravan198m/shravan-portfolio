@@ -95,7 +95,12 @@ export default async function handler(req, res) {
       // Blob's client-token request is authenticated by the same session and admin token.
       // Do not require a matching Origin here: Vercel can rewrite the host before the
       // Blob SDK calls this endpoint, while the session and token checks remain strict.
-      requireAdmin(req); const body = await jsonBody(req);
+      // The Blob client-token handshake does not reliably forward custom headers
+      // through every Vercel edge path. The signed admin session cookie is the
+      // authentication boundary here; the final upload is still constrained by
+      // the generated token's path, type, and size policy below.
+      if (!readSession(req)) throw Object.assign(new Error('Please sign in to the control room.'), { status: 401 });
+      const body = await jsonBody(req);
       const result = await handleUpload({ request: req, body, onBeforeGenerateToken: async (uploadPath, clientPayload) => {
         const payload = JSON.parse(clientPayload || '{}'); if (!allowableUpload(uploadPath, payload.type)) throw new Error('Unsupported upload type or path.');
         return { allowedContentTypes: [...uploadTypes], maximumSizeInBytes: uploadLimit, addRandomSuffix: false, tokenPayload: JSON.stringify({ type: payload.type }) };
