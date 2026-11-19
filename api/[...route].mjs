@@ -88,7 +88,10 @@ export default async function handler(req, res) {
     if (pathname === '/api/admin/logout' && req.method === 'POST') { origin(req, true); requireAdmin(req); clearSession(res); return send(res, 200, { ok: true }); }
     if (pathname === '/api/media' && req.method === 'GET') { origin(req); requireAdmin(req); return send(res, 200, { files: await dynamicMedia() }); }
     if (pathname === '/api/media/upload' && req.method === 'POST') {
-      origin(req, true); requireAdmin(req); const body = await jsonBody(req);
+      // Blob's client-token request is authenticated by the same session and admin token.
+      // Do not require a matching Origin here: Vercel can rewrite the host before the
+      // Blob SDK calls this endpoint, while the session and token checks remain strict.
+      requireAdmin(req); const body = await jsonBody(req);
       const result = await handleUpload({ request: req, body, onBeforeGenerateToken: async (uploadPath, clientPayload) => {
         const payload = JSON.parse(clientPayload || '{}'); if (!allowableUpload(uploadPath, payload.type)) throw new Error('Unsupported upload type or path.');
         return { allowedContentTypes: [...uploadTypes], maximumSizeInBytes: uploadLimit, addRandomSuffix: false, tokenPayload: JSON.stringify({ type: payload.type }) };
