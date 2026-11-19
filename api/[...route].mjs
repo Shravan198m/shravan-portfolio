@@ -38,6 +38,8 @@ function origin(req, mutation = false) {
 function requireAdmin(req) { const session = readSession(req); if (!session) throw Object.assign(new Error('Please sign in to the control room.'), { status: 401 }); if (!secureEqual(req.headers['x-admin-token'], session.token)) throw Object.assign(new Error('The editor session expired. Reload the editor and try again.'), { status: 403 }); return session; }
 async function jsonBody(req) {
   if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
+  if (typeof req.body === 'string') { try { return JSON.parse(req.body); } catch { throw Object.assign(new Error('Content must be valid JSON.'), { status: 400 }); } }
+  if (Buffer.isBuffer(req.body)) { try { return JSON.parse(req.body.toString('utf8')); } catch { throw Object.assign(new Error('Content must be valid JSON.'), { status: 400 }); } }
   const chunks = []; for await (const part of req) chunks.push(part);
   try { return JSON.parse(Buffer.concat(chunks).toString('utf8')); } catch { throw Object.assign(new Error('Content must be valid JSON.'), { status: 400 }); }
 }
