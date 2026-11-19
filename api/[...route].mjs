@@ -5,6 +5,12 @@ import { del, list, put } from '@vercel/blob';
 import { handleUpload } from '@vercel/blob/client';
 import { validateContent } from '../server.mjs';
 
+// The Blob store was connected with the PORTFOLIO prefix in Vercel, so support
+// that generated token name while retaining the standard name for local setups.
+if (!process.env.BLOB_READ_WRITE_TOKEN && process.env.PORTFOLIO_READ_WRITE_TOKEN) {
+  process.env.BLOB_READ_WRITE_TOKEN = process.env.PORTFOLIO_READ_WRITE_TOKEN;
+}
+
 const contentPrefix = 'svm-portfolio/content/';
 const mediaPrefix = 'svm-portfolio/uploads/';
 const sessionLife = 8 * 60 * 60;
