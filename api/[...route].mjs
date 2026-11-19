@@ -86,7 +86,11 @@ export default async function handler(req, res) {
     }
     if (pathname === '/api/admin/session' && req.method === 'GET') { origin(req); const session = readSession(req); if (!session) return send(res, 401, { error: 'Please sign in to the control room.' }); return send(res, 200, { token: session.token }); }
     if (pathname === '/api/admin/logout' && req.method === 'POST') { origin(req, true); requireAdmin(req); clearSession(res); return send(res, 200, { ok: true }); }
-    if (pathname === '/api/media' && req.method === 'GET') { origin(req); requireAdmin(req); return send(res, 200, { files: await dynamicMedia() }); }
+    if (pathname === '/api/media' && req.method === 'GET') {
+      origin(req);
+      if (!readSession(req)) return send(res, 401, { error: 'Please sign in to the control room.' });
+      return send(res, 200, { files: await dynamicMedia() });
+    }
     if (pathname === '/api/media/upload' && req.method === 'POST') {
       // Blob's client-token request is authenticated by the same session and admin token.
       // Do not require a matching Origin here: Vercel can rewrite the host before the
