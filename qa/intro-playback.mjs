@@ -55,7 +55,7 @@ try {
   const m = await mobile.newPage(); await m.goto(base); await m.click('#enter-silent');
   await m.waitForFunction(() => document.querySelector('#opening-film-video').currentTime > .5);
   check('Mobile playback remains inline', await m.$eval('#opening-film-video', v => v.playsInline && v.videoWidth > 0));
-  check('Mobile uses the smaller photographic export', await m.$eval('#opening-film-video', v => v.currentSrc.endsWith('intro-photographic-v3-mobile.mp4') && v.videoWidth === 1280));
+  check('Mobile uses the smaller photographic export', await m.$eval('#opening-film-video', v => v.currentSrc.endsWith('intro-photographic-v3-score-mobile.mp4') && v.videoWidth === 1280));
   check('Mobile page has no horizontal overflow', await m.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await m.screenshot({ path: 'tmp/intro-qa/mobile.png' }); await mobile.close();
 

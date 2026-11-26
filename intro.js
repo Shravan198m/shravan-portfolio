@@ -55,7 +55,7 @@
     window.PortfolioAudio?.stop();
     if (!video.getAttribute('src')) {
       const compact = matchMedia('(max-width: 760px)').matches || navigator.connection?.saveData;
-      video.src = compact ? '/assets/intro-photographic-v3-mobile.mp4' : '/assets/intro-photographic-v3.mp4';
+      video.src = compact ? '/assets/intro-photographic-v3-score-mobile.mp4' : '/assets/intro-photographic-v3-score.mp4';
     }
     video.currentTime = 0; video.muted = !sound; video.volume = 1; soundLabel();
     status.textContent = 'LOADING THE OPENING FILM…';

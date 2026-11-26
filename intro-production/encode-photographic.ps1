@@ -5,11 +5,11 @@ $ffmpegPath = Join-Path $projectRoot 'tools/ffmpeg/ffmpeg-9.0.2-essentials_build
     $framePath = Join-Path $projectRoot ('tmp/photographic-intro-v3/frames/frame-{0:0000}.jpg' -f $_)
     if (!(Test-Path -LiteralPath $framePath)) { throw ('Render is incomplete: missing frame {0}' -f $_) }
 }
-$outputPath = Join-Path $projectRoot 'assets/intro-photographic-v3.mp4'
+$outputPath = Join-Path $projectRoot 'assets/intro-photographic-v3-score.mp4'
 $arguments = @('-y','-hide_banner','-framerate','24','-i',(Join-Path $projectRoot 'tmp/photographic-intro-v3/frames/frame-%04d.jpg'),'-i',(Join-Path $projectRoot 'assets/audio/intro-score.m4a'))
 1..6 | ForEach-Object { $arguments += @('-i', (Join-Path $projectRoot ('assets/audio/voice-{0:00}.m4a' -f $_))) }
 $arguments += @('-f','lavfi','-i','anoisesrc=d=30:color=pink:amplitude=0.08:r=48000:seed=23')
-$filters = @('[1:a]volume=0.24,afade=t=in:d=0.6,afade=t=out:st=28.5:d=1.5[score]')
+$filters = @('[1:a]asplit=2[opening][reprise];[opening]atrim=0:20,asetpts=PTS-STARTPTS[s0];[reprise]atrim=6:18,asetpts=PTS-STARTPTS[s1];[s0][s1]acrossfade=d=2:c1=tri:c2=tri,volume=0.24,afade=t=in:d=0.6,afade=t=out:st=29:d=1[score]')
 $delays = @(2000,7000,12000,18000,23000,27000)
 0..5 | ForEach-Object { $inputIndex = $_ + 2; $filters += ('[{0}:a]volume=0.95,adelay={1}:all=1[v{2}]' -f $inputIndex,$delays[$_],$_) }
 $filters += '[8:a]highpass=f=120,lowpass=f=2800,volume=0.22,afade=t=in:d=0.4,afade=t=out:st=6:d=3[rain]'
@@ -19,5 +19,5 @@ $arguments += @('-filter_complex',($filters -join ';'),'-map','0:v','-map','[a]'
 if ($LASTEXITCODE -ne 0) { throw 'Encoding failed' }
 & $ffmpegPath -y -hide_banner -loglevel error -i $outputPath -frames:v 1 -update 1 -q:v 3 (Join-Path $projectRoot 'assets/intro-photographic-v3-poster.jpg')
 if ($LASTEXITCODE -ne 0) { throw 'Poster export failed' }
-& $ffmpegPath -y -hide_banner -loglevel error -i $outputPath -vf 'scale=1280:720:flags=lanczos' -c:v libx264 -preset slow -crf 23 -c:a copy -movflags +faststart (Join-Path $projectRoot 'assets/intro-photographic-v3-mobile.mp4')
+& $ffmpegPath -y -hide_banner -loglevel error -i $outputPath -vf 'scale=1280:720:flags=lanczos' -c:v libx264 -preset slow -crf 23 -c:a copy -movflags +faststart (Join-Path $projectRoot 'assets/intro-photographic-v3-score-mobile.mp4')
 if ($LASTEXITCODE -ne 0) { throw 'Mobile export failed' }
