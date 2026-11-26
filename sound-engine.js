@@ -11,7 +11,15 @@
   function startRain(){if(!enabled||rain)return;const c=engine(),b=c.createBuffer(1,c.sampleRate*3,c.sampleRate),d=b.getChannelData(0);let last=0;for(let i=0;i<d.length;i++){last=(last+(Math.random()*2-1)*.03)/1.03;d[i]=last*3;}rain=c.createBufferSource();rain.buffer=b;rain.loop=true;const g=c.createGain();g.gain.value=.2;rain.connect(g);g.connect(master);rain.start();}
   function mute(value){enabled=!value;score.muted=value;voices.forEach(a=>a.muted=value);if(master)master.gain.value=value?0:.55;if(value)stopRain();document.dispatchEvent(new CustomEvent('portfolio:sound',{detail:{enabled}}));}
   window.PortfolioAudio={
-    async unlock(value){mute(!value);if(value)await engine().resume();},
+    async unlock(value){
+      mute(!value);
+      if(value){
+        // Start media in the click handler, before awaiting anything.
+        const contextReady=engine().resume();
+        score.volume=.44;
+        await Promise.all([contextReady,score.play()]);
+      }
+    },
     start(){score.currentTime=0;score.volume=.44;score.muted=!enabled;if(enabled){score.play().catch(()=>{});startRain();}},
     narrate(index){const a=voices[index];currentVoice=a;voices.forEach(v=>{if(v!==a)v.pause();});score.volume=.17;a.currentTime=0;a.volume=.85;a.onended=()=>score.volume=.44;if(enabled)a.play().catch(()=>{score.volume=.44;});},
     resumeAt(time,index,offset){if(!enabled)return;engine().resume().catch(()=>{});voices.forEach(a=>a.pause());currentVoice=null;score.currentTime=time;score.volume=index>=0?.17:.44;score.play().catch(()=>{});if(index>=0){currentVoice=voices[index];currentVoice.currentTime=offset;currentVoice.play().catch(()=>{});}startRain();},

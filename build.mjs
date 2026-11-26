@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const output = path.join(root, 'dist');
 const publicFiles = [
+  "camera-flight.js", "camera-flight.css",
   'index.html', 'tv.js', 'tv.css', 'intro.js', 'intro.css', 'sound-engine.js',
   'photographic.css', 'admin.html', 'admin.js', 'admin.css', 'login.html',
   'login.js', 'login.css', 'favicon.svg'
