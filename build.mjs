@@ -13,6 +13,7 @@ const publicAssets = [
   '01-exterior-rain.png', '02-viewer-remote.png', '03-tv-reveal.png',
   '04-kitchen-coffee.png', 'intro-details.png', 'intro-rain.png',
   'screening-room-opening.png', 'retro-room.png', 'photographic-tv.png',
+  'intro-cinematic.mp4',
   'hero-campaign-v2.png', 'signature-transparent-v2.png',
   'Shravan-V-Moodlu-Resume.pdf',
   'project-aarogya.svg', 'project-glaucoma.svg', 'project-interview.svg',
