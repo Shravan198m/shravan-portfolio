@@ -1,8 +1,8 @@
 (() => {
   let ctx, master, rain, currentVoice=null, enabled=false;
-  const score=new Audio('/assets/audio/intro-score.m4a'); score.preload='auto';
+  const score=new Audio('/assets/audio/intro-score.m4a'); score.preload='none';
   score.id='intro-score-audio';score.hidden=true;document.body.append(score);
-  const voices=Array.from({length:6},(_,i)=>{const a=new Audio(`/assets/audio/voice-0${i+1}.m4a`);a.preload='auto';a.id='voice-'+(i+1);a.hidden=true;document.body.append(a);return a;});
+  const voices=Array.from({length:6},(_,i)=>{const a=new Audio(`/assets/audio/voice-0${i+1}.m4a`);a.preload='none';a.id='voice-'+(i+1);a.hidden=true;document.body.append(a);return a;});
   function engine(){if(!ctx){ctx=new AudioContext();master=ctx.createGain();master.gain.value=.55;master.connect(ctx.destination);}return ctx;}
   function noise(seconds,volume,frequency=1200){const c=engine(),buffer=c.createBuffer(1,Math.ceil(c.sampleRate*seconds),c.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;const source=c.createBufferSource(),filter=c.createBiquadFilter(),gain=c.createGain();source.buffer=buffer;filter.type='lowpass';filter.frequency.value=frequency;gain.gain.setValueAtTime(volume,c.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,c.currentTime+seconds);source.connect(filter);filter.connect(gain);gain.connect(master);source.start();source.stop(c.currentTime+seconds);return source;}
   function tone(frequency,seconds,volume,end=frequency){const c=engine(),o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(frequency,c.currentTime);o.frequency.exponentialRampToValueAtTime(end,c.currentTime+seconds);g.gain.setValueAtTime(volume,c.currentTime);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+seconds);o.connect(g);g.connect(master);o.start();o.stop(c.currentTime+seconds);}

@@ -1,26 +1,109 @@
 (() => {
-  const intro=document.querySelector('#cinema-intro'),room=document.querySelector('#room'),skip=document.querySelector('#skip-intro'),replay=document.querySelector('#replay-intro'),caption=document.querySelector('#film-caption'),status=document.querySelector('#entrance-status'),progress=document.querySelector('#film-progress'),gate=document.querySelector('#film-gate'),mute=document.querySelector('#film-mute'),pause=document.querySelector('#film-pause');
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),audio=window.PortfolioAudio;
-  const sceneImages={rain:['.shot-rain','/assets/01-exterior-rain.png'],coffee:['.shot-coffee','/assets/04-kitchen-coffee.png'],details:['.shot-details','/assets/intro-details.png'],room:['.shot-room','/assets/screening-room-opening.png'],viewer:['.shot-viewer','/assets/02-viewer-remote.png'],television:['.shot-television','/assets/03-tv-reveal.png']};
-  const cues=[{at:2,end:4.8,text:'Some ideas begin quietly.'},{at:7,end:11.4,text:'A question. A frame. A possibility.'},{at:12,end:15.6,text:'Then curiosity becomes something you can see.'},{at:18,end:22,text:'Built in code. Told in pictures.'},{at:23,end:26.2,text:'Different ways of making an idea real.'},{at:27,end:29.4,text:'Welcome to my world.'}];
-  let frame,startTime=0,elapsed=0,paused=false,running=false,fired=new Set(),finishTimer,generation=0,starting=false;
-  function seen(){try{return sessionStorage.getItem('svm-story-v3');}catch{return false;}}
-  let imagesReady;
-  function loadIntroImages(){return imagesReady ||= Promise.all(Object.values(sceneImages).map(async ([selector,url])=>{const image=new Image();image.src=url;await image.decode();document.querySelector(selector)?.style.setProperty("background-image",`url("${url}")`,"important");}));}
-  function finish(){generation++;starting=false;cancelAnimationFrame(frame);clearTimeout(finishTimer);running=false;paused=false;audio.stop();room.inert=false;document.body.classList.remove('story-running','story-settle','story-picture','story-paused');intro.classList.add('departing');try{sessionStorage.setItem('svm-story-v3','1');}catch{} finishTimer=setTimeout(()=>{intro.hidden=true;intro.classList.remove('departing');document.querySelector('.channel-button[aria-pressed=true]')?.focus({preventScroll:true});},reduced.matches?0:650);}
-  function tick(now){if(!running||paused)return;elapsed=Math.min(30,(now-startTime)/1000);intro.style.setProperty('--progress',elapsed/30);intro.dataset.scene=elapsed<4?'rain':elapsed<8?'coffee':elapsed<11?'details':elapsed<15?'room':elapsed<20?'viewer':elapsed<22?'television':elapsed<25?'handoff':'live';document.body.classList.toggle('story-settle',elapsed>=22);document.body.classList.toggle('story-picture',elapsed>=25);const sceneIndex=elapsed<4?0:elapsed<8?1:elapsed<11?2:elapsed<15?3:elapsed<20?4:elapsed<25?5:6;status.textContent=['01 / THE NIGHT','02 / COFFEE & RAIN','03 / THE QUESTION','04 / THE ROOM','05 / THE CHOICE','06 / FINDING THE SIGNAL','07 / YOUR PROGRAMME BEGINS'][sceneIndex];progress.textContent=`${String(Math.floor(elapsed)).padStart(2,'0')} / 30`;
-    window.updateIntroCamera?.(elapsed);
-    cues.forEach((cue,index)=>{if(elapsed>=cue.at&&!fired.has(index)){fired.add(index);audio.narrate(index);}});const active=cues.find(c=>elapsed>=c.at&&elapsed<c.end);caption.textContent=active?.text||'';caption.hidden=!active;
-    if(elapsed>=17.8&&!fired.has('tape')){fired.add('tape');audio.sfx('tape');}if(elapsed>=21.5&&!fired.has('power')){fired.add('power');audio.sfx('power');}
-    if(elapsed>=30){finish();return;}frame=requestAnimationFrame(tick);
+  const intro = document.querySelector('#cinema-intro');
+  const room = document.querySelector('#room');
+  const gate = document.querySelector('#film-gate');
+  const caption = document.querySelector('#film-caption');
+  const status = document.querySelector('#entrance-status');
+  const progress = document.querySelector('#film-progress');
+  const pause = document.querySelector('#film-pause');
+  const mute = document.querySelector('#film-mute');
+  const skip = document.querySelector('#skip-intro');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const video = document.createElement('video');
+  video.id = 'opening-film-video'; video.className = 'opening-film-video';
+  video.preload = 'none'; video.playsInline = true;
+  video.poster = '/assets/intro-flight-poster.jpg';
+  video.setAttribute('aria-label', 'Camera journey from a rainy kitchen into a television lounge');
+  intro.prepend(video);
+  const cues = [
+    [2, 4.8, 'Some ideas begin quietly.'],
+    [7, 11.4, 'A question. A frame. A possibility.'],
+    [12, 15.6, 'Then curiosity becomes something you can see.'],
+    [18, 22, 'Built in code. Told in pictures.'],
+    [23, 26.2, 'Different ways of making an idea real.'],
+    [27, 29.4, 'Welcome to my world.']
+  ];
+  let running = false, starting = false, frame, finishTimer, attempt = 0;
+  const seen = () => { try { return sessionStorage.getItem('svm-story-v4'); } catch { return false; } };
+  function update() {
+    const time = video.currentTime;
+    intro.style.setProperty('--progress', Math.min(time / 30, 1));
+    progress.textContent = `${String(Math.floor(time)).padStart(2, '0')} / 30`;
+    const cue = cues.find(([from, to]) => time >= from && time < to);
+    caption.textContent = cue?.[2] || ''; caption.hidden = !cue;
+    if (video.readyState >= 3) status.textContent = time < 4 ? '01 / COME IN FROM THE RAIN' : time < 11 ? '02 / A MOMENT OF CURIOSITY' : time < 20 ? '03 / THROUGH THE ROOM' : '04 / FINDING THE SIGNAL';
+    if (running && !video.paused) frame = requestAnimationFrame(update);
   }
-  async function begin(sound){if(starting||running)return;starting=true;const attempt=++generation;try{await audio.unlock(sound);await loadIntroImages();}catch(error){audio.stop();starting=false;status.textContent="Unable to start: check your connection and try again, or play silently.";return;}if(attempt!==generation)return;starting=false;gate.hidden=true;intro.classList.add('playing');intro.classList.remove('paused');document.body.classList.add('story-running');running=true;paused=false;fired=new Set();elapsed=0;startTime=performance.now();pause.textContent='PAUSE';mute.textContent=sound?'SOUND ON':'SOUND OFF';mute.setAttribute('aria-pressed',String(sound));audio.start();skip.focus({preventScroll:true});frame=requestAnimationFrame(tick);}
-  function prepare(){generation++;starting=false;paused=false;elapsed=0;fired=new Set();caption.textContent="";pause.textContent="PAUSE";clearTimeout(finishTimer);cancelAnimationFrame(frame);audio.stop();document.querySelector("#tv-video")?.pause();running=false;intro.hidden=false;intro.classList.remove('departing','playing','paused');intro.dataset.scene='rain';intro.style.setProperty('--progress',0);gate.hidden=false;caption.hidden=true;room.inert=true;document.body.classList.remove('story-running','story-settle','story-picture','story-paused');status.textContent='A THIRTY-SECOND OPENING FILM';progress.textContent='00 / 30';document.querySelector('#enter-sound').focus({preventScroll:true});}
-  function togglePause(){if(!running)return;paused=!paused;intro.classList.toggle('paused',paused);document.body.classList.toggle('story-paused',paused);pause.textContent=paused?'RESUME':'PAUSE';if(paused){cancelAnimationFrame(frame);audio.pause();}else{startTime=performance.now()-elapsed*1000;const n=cues.findIndex(c=>elapsed>=c.at&&elapsed<c.end);audio.resumeAt(elapsed,n,n>=0?elapsed-cues[n].at:0);frame=requestAnimationFrame(tick);}}
-  document.querySelector('#enter-sound').addEventListener('click',()=>begin(true));document.querySelector('#enter-silent').addEventListener('click',()=>begin(false));skip.addEventListener('click',finish);replay.addEventListener('click',prepare);pause.addEventListener('click',togglePause);mute.addEventListener('click',()=>{audio.mute(audio.enabled);if(audio.enabled&&running&&!paused){const n=cues.findIndex(c=>elapsed>=c.at&&elapsed<c.end);audio.resumeAt(elapsed,n,n>=0?elapsed-cues[n].at:0);}mute.textContent=audio.enabled?'SOUND ON':'SOUND OFF';mute.setAttribute('aria-pressed',String(audio.enabled));});document.addEventListener('keydown',e=>{if(!intro.hidden&&e.key==='Escape')finish();});document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)togglePause();});
-  loadIntroImages().catch(()=>{status.textContent="Images are still unavailable. Check your connection and try Play again.";imagesReady=null;});
-  if(seen()||reduced.matches){intro.hidden=true;}else{prepare();}
+  function soundLabel() {
+    mute.textContent = video.muted ? 'SOUND OFF' : 'SOUND ON';
+    mute.setAttribute('aria-pressed', String(!video.muted));
+  }
+  function finish() {
+    ++attempt; starting = running = false;
+    cancelAnimationFrame(frame); clearTimeout(finishTimer);
+    video.pause(); window.PortfolioAudio?.stop(); room.inert = false;
+    intro.classList.add('departing');
+    try { sessionStorage.setItem('svm-story-v4', '1'); } catch {}
+    finishTimer = setTimeout(() => {
+      intro.hidden = true; intro.classList.remove('departing');
+      document.querySelector('.channel-button[aria-pressed=true]')?.focus({ preventScroll: true });
+    }, reduced.matches ? 0 : 650);
+  }
+  async function begin(sound) {
+    if (starting || running) return;
+    const currentAttempt = ++attempt; starting = true;
+    window.PortfolioAudio?.stop();
+    if (!video.getAttribute('src')) video.src = '/assets/intro-flight.mp4';
+    video.currentTime = 0; video.muted = !sound; video.volume = 1; soundLabel();
+    status.textContent = 'LOADING THE OPENING FILM…';
+    try {
+      // Start in the gesture. The single media clock keeps rendered picture,
+      // score and narration together through buffering, pausing and seeking.
+      await video.play();
+      if (currentAttempt !== attempt) return;
+      starting = false; running = true; gate.hidden = true;
+      intro.classList.add('playing'); pause.textContent = 'PAUSE';
+      if (document.hidden) video.pause();
+      skip.focus({ preventScroll: true }); update();
+    } catch {
+      if (currentAttempt !== attempt) return;
+      starting = false; video.pause(); gate.hidden = false;
+      status.textContent = 'Film could not play. Try again, play silently, or skip to the portfolio.';
+    }
+  }
+  function prepare() {
+    ++attempt; starting = running = false;
+    clearTimeout(finishTimer); cancelAnimationFrame(frame);
+    video.pause(); if (video.readyState) video.currentTime = 0;
+    window.PortfolioAudio?.stop(); document.querySelector('#tv-video')?.pause();
+    intro.hidden = false; intro.classList.remove('departing', 'playing');
+    gate.hidden = false; caption.hidden = true; room.inert = true;
+    progress.textContent = '00 / 30'; intro.style.setProperty('--progress', 0);
+    status.textContent = 'A THIRTY-SECOND OPENING FILM';
+    document.querySelector('#enter-sound').focus({ preventScroll: true });
+  }
+  async function togglePause() {
+    if (!running) return;
+    if (!video.paused) { video.pause(); return; }
+    try { await video.play(); } catch { status.textContent = 'Playback paused. Press Resume to try again.'; }
+  }
+  video.addEventListener('pause', () => { cancelAnimationFrame(frame); pause.textContent = 'RESUME'; });
+  video.addEventListener('playing', () => { if (running) { pause.textContent = 'PAUSE'; cancelAnimationFrame(frame); update(); } });
+  video.addEventListener('waiting', () => { if (running) status.textContent = 'BUFFERING — YOUR FILM WILL CONTINUE'; });
+  video.addEventListener('ended', finish);
+  video.addEventListener('error', () => {
+    if (!starting && !running) return;
+    ++attempt; starting = running = false; cancelAnimationFrame(frame);
+    gate.hidden = false; intro.classList.remove('playing');
+    status.textContent = 'Film unavailable. Retry playback or skip to the portfolio.';
+    video.removeAttribute('src'); video.load();
+  });
+  document.querySelector('#enter-sound').addEventListener('click', () => begin(true));
+  document.querySelector('#enter-silent').addEventListener('click', () => begin(false));
+  document.querySelector('#replay-intro').addEventListener('click', prepare);
+  skip.addEventListener('click', finish); pause.addEventListener('click', togglePause);
+  mute.addEventListener('click', () => { video.muted = !video.muted; soundLabel(); });
+  document.addEventListener('keydown', e => { if (!intro.hidden && e.key === 'Escape') finish(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && running) video.pause(); });
+  if (seen() || reduced.matches) intro.hidden = true; else prepare();
 })();
-
-
-
