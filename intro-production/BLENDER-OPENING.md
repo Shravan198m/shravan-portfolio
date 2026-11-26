@@ -1,5 +1,9 @@
 # Connected-room opening
 
+**Archived prototype:** this modeled-room version was superseded at the user's
+request because it changed the original photographic style. The active film is
+documented in `photographic-prompts.md` and rendered by `render-photographic.mjs`.
+
 This is an original stylized Blender scene, not generated drone footage. The camera
 travels through one connected set with physical walls, a window, a kitchen counter,
 coffee cup, doorway, armchair, anonymous seated figure, and a retro television.

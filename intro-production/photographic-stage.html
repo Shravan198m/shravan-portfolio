@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style></head><body><canvas id="film" width="1600" height="900"></canvas><script>
+'use strict';
+// Render-only stage: original photographic pixels on depth-shaped meshes.
+// No reconstructed furniture or replacement character is displayed.
+const canvas=document.querySelector('#film'),ctx=canvas.getContext('2d');
+const surface=document.createElement('canvas');surface.width=1600;surface.height=900;
+const gl=surface.getContext('webgl',{alpha:false,antialias:true,preserveDrawingBuffer:true});
+if(!gl)throw new Error('WebGL is required for the photographic projection render');
+function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s;}
+const program=gl.createProgram();
+gl.attachShader(program,shader(gl.VERTEX_SHADER,`
+attribute vec3 mesh;uniform vec3 camera;uniform float roll;varying vec2 uv;
+void main(){uv=mesh.xy;float d=mesh.z;float h=.82842712475;
+vec3 p=vec3((uv.x-.5)*h*(16./9.)*d*1.12,(uv.y-.5)*h*d*1.12,d)-camera;
+float c=cos(roll),s=sin(roll);p.xy=mat2(c,-s,s,c)*p.xy;
+gl_Position=vec4(p.x*2.41421356237/(16./9.),p.y*2.41421356237,1.002002*p.z-.2002002,p.z);}`));
+gl.attachShader(program,shader(gl.FRAGMENT_SHADER,`precision highp float;uniform sampler2D photo;varying vec2 uv;void main(){gl_FragColor=texture2D(photo,uv);}`));
+gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(program));gl.useProgram(program);
+const cameraUniform=gl.getUniformLocation(program,'camera'),rollUniform=gl.getUniformLocation(program,'roll'),meshAttribute=gl.getAttribLocation(program,'mesh');
+gl.enableVertexAttribArray(meshAttribute);gl.clearColor(0,0,0,1);gl.enable(gl.DEPTH_TEST);
+const shots=[
+ {image:'intro-house-rain-v2.png',start:0,duration:5.5,from:[-.12,.16,0],to:[.55,-.03,.95],roll:[-.003,.002],kind:'house'},
+ {image:'01-exterior-rain.png',start:5,duration:4,from:[-.16,.05,.05],to:[.12,-.02,.7],roll:[.002,0],kind:'window'},
+ {image:'04-kitchen-coffee.png',start:8.5,duration:6,from:[.1,.025,0],to:[-.17,-.025,.48],roll:[-.003,.002],kind:'coffee'},
+ {image:'screening-room-opening.png',start:14,duration:5.5,from:[-.10,.03,0],to:[.24,.01,.5],roll:[.002,-.002],kind:'room'},
+ {image:'02-viewer-remote.png',start:19,duration:5,from:[-.08,.03,.02],to:[.28,.02,.45],roll:[-.002,0],kind:'viewer'},
+ {image:'03-tv-reveal.png',start:23.5,duration:6.5,from:[.08,.02,0],to:[-.1,0,.75],roll:[.002,0],kind:'tv'}
+];
+function bump(u,v,x,y,sx,sy){return Math.exp(-(((u-x)/sx)**2+((v-y)/sy)**2));}
+function depth(kind,u,v){
+ if(kind==='house')return 7-1.8*bump(u,v,.05,.15,.22,.5)-1.1*Math.max(0,(v-.65)/.35);
+ if(kind==='window')return 5.8-.9*bump(u,v,.03,.5,.18,.8)-.45*bump(u,v,.52,.5,.04,.8);
+ if(kind==='coffee')return 6.3-2.1*bump(u,v,.28,.68,.17,.4)-1.2*Math.max(0,(v-.65)/.35);
+ if(kind==='room')return 6.5-2.7*bump(u,v,.22,.72,.26,.42)-1.1*bump(u,v,.94,.8,.18,.3);
+ if(kind==='viewer')return 6.4-2.7*bump(u,v,.24,.64,.32,.6)-1.25*bump(u,v,.51,.7,.12,.15);
+ return 5.8-.65*bump(u,v,.5,.52,.43,.45);
+}
+function prepareMesh(shot){
+ const vertices=[],indices=[],cols=128,rows=72;
+ for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){const u=x/cols,v=y/rows;vertices.push(u,v,depth(shot.kind,u,1-v));}
+ for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const a=y*(cols+1)+x;indices.push(a,a+1,a+cols+1,a+1,a+cols+2,a+cols+1);}
+ shot.vertices=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,shot.vertices);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+ shot.indices=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shot.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices),gl.STATIC_DRAW);shot.count=indices.length;
+}
+const smooth=x=>x*x*(3-2*x),mix=(a,b,t)=>a+(b-a)*t;
+function drawShot(shot,time){
+ const t=smooth(Math.max(0,Math.min(1,(time-shot.start)/shot.duration)));
+ gl.viewport(0,0,1600,900);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+ gl.bindBuffer(gl.ARRAY_BUFFER,shot.vertices);gl.vertexAttribPointer(meshAttribute,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,shot.indices);
+ gl.bindTexture(gl.TEXTURE_2D,shot.texture);gl.uniform3f(cameraUniform,...shot.from.map((a,i)=>mix(a,shot.to[i],t)));gl.uniform1f(rollUniform,mix(...shot.roll,t));
+ gl.drawElements(gl.TRIANGLES,shot.count,gl.UNSIGNED_SHORT,0);ctx.drawImage(surface,0,0);
+}
+let randomState=23;function rand(){randomState=(randomState*1664525+1013904223)>>>0;return randomState/4294967296;}
+const drops=Array.from({length:140},()=>({x:rand()*1800,y:rand()*1100,z:rand(),phase:rand()*10}));
+function rain(time){
+ const strength=Math.max(0,Math.min(1,(9-time)/1.5));if(!strength)return;
+ ctx.save();ctx.strokeStyle='#b7d5e6';
+ for(const d of drops){const velocity=190+d.z*440,x=(d.x-time*(35+d.z*45)+10000)%1800-100,y=(d.y+time*velocity)%1100-100;
+ ctx.globalAlpha=strength*(.07+d.z*.13);ctx.lineWidth=.55+d.z*.65;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x-3-d.z*4,y+9+d.z*18);ctx.stroke();}
+ ctx.restore();
+}
+window.renderFilm=time=>{
+ ctx.globalAlpha=1;ctx.fillStyle='#000';ctx.fillRect(0,0,1600,900);
+ const active=shots.filter(s=>time>=s.start&&time<s.start+s.duration);
+ active.forEach((s,i)=>{ctx.globalAlpha=i?smooth(Math.min(1,(time-s.start)/.5)):1;drawShot(s,time);});ctx.globalAlpha=1;rain(time);
+ // Very restrained edge falloff; original amber / blue colour is preserved.
+ const vignette=ctx.createRadialGradient(800,450,400,800,450,1000);vignette.addColorStop(0,'#0000');vignette.addColorStop(1,'#0003');ctx.fillStyle=vignette;ctx.fillRect(0,0,1600,900);
+ if(time>26.5){ctx.save();ctx.globalAlpha=smooth(Math.min(1,(time-26.5)/1.2));ctx.fillStyle='#e9d4a4';ctx.textAlign='center';ctx.shadowColor='#000';ctx.shadowBlur=12;ctx.font='34px Georgia';ctx.fillText('S V M',745,435);ctx.font='16px Georgia';ctx.fillText('P R E S E N T S',745,477);ctx.restore();}
+};
+window.stageReady=Promise.all(shots.map(async s=>{const image=new Image();image.src='/assets/'+s.image;await image.decode();prepareMesh(s);s.texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,s.texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);})).then(()=>renderFilm(0));
+</script></body></html>
