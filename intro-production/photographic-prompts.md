@@ -39,18 +39,27 @@ The mesh contains approximate artistic depth, not measured geometry. Camera move
 are deliberately limited to avoid revealing unseen surfaces or distorting faces.
 Only the new wide exterior was generated; all five old photographs stay unchanged.
 
-Output: `assets/intro-photographic-v2.mp4` (1600 × 900, 24 fps, 30 seconds)
-and `assets/intro-photographic-v2-poster.jpg`. JPEG intermediate frames use quality
+Output: `assets/intro-photographic-v3.mp4` (1600 × 900, 24 fps, 30 seconds)
+and `assets/intro-photographic-v3-poster.jpg`. JPEG intermediate frames use quality
 97; the final H.264 encode uses CRF 20 and fast-start metadata. The existing score
 and six original narration recordings are mixed with quiet rain ambience during
 the exterior. Captions and player controls still use the single video clock.
 Phones and data-saver connections receive the same film at 1280 × 720 from
-`assets/intro-photographic-v2-mobile.mp4`; the audio is copied without another encode.
+`assets/intro-photographic-v3-mobile.mp4`; the audio is copied without another encode.
 
 The original model and its previous movie remain available as archived source;
 `build.mjs` ships only the active photographic opening and poster.
 
-## Export checks
+## Motion and colour revision (v3)
+
+All shot moves travel in a consistent direction, with 85% linear progression and
+15% easing so the camera does not stop at every dissolve. Camera roll is removed.
+The window, counter and television use rigid image planes; the exterior and seated
+foreground retain only 22% of the previous depth displacement to reduce bending.
+The original photographs are unchanged. The movie grade uses saturation 0.84,
+gamma 1.08, contrast 0.98 and brightness +0.012, with no added vignette.
+
+## Previous export checks (v2)
 
 The desktop export is 10,848,846 bytes; mobile is 4,687,573 bytes. FFprobe verifies
 720 frames and 30-second video/audio streams. All 21 local browser assertions

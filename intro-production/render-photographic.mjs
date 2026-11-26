@@ -1,7 +1,7 @@
 import { chromium } from '../tmp/browser-check/node_modules/playwright/index.mjs';
 import { mkdir, readFile } from 'node:fs/promises';
 const preview=process.argv.includes('--preview');
-const output='tmp/photographic-intro';await mkdir(output+'/frames',{recursive:true});
+const output='tmp/photographic-intro-v3';await mkdir(output+'/frames',{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 try{
  const page=await browser.newPage({viewport:{width:1600,height:900},deviceScaleFactor:1});

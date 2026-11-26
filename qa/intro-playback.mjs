@@ -19,7 +19,7 @@ try {
   await page.goto(base);
   await page.waitForSelector('#enter-sound');
   check('Opening gate is visible', await page.locator('#film-gate').isVisible());
-  check('Video is not downloaded before pressing Play', !requests.some(u => /intro-photographic-v2.*\.mp4/.test(u)));
+  check('Video is not downloaded before pressing Play', !requests.some(u => /intro-photographic-v3.*\.mp4/.test(u)));
   await page.click('#enter-sound');
   await page.waitForFunction(() => document.querySelector('#opening-film-video').currentTime > 2);
   const media = await page.$eval('#opening-film-video', v => ({ width: v.videoWidth, time: v.currentTime, muted: v.muted, paused: v.paused, audioBytes: v.webkitAudioDecodedByteCount, frames: v.getVideoPlaybackQuality().totalVideoFrames }));
@@ -55,7 +55,7 @@ try {
   const m = await mobile.newPage(); await m.goto(base); await m.click('#enter-silent');
   await m.waitForFunction(() => document.querySelector('#opening-film-video').currentTime > .5);
   check('Mobile playback remains inline', await m.$eval('#opening-film-video', v => v.playsInline && v.videoWidth > 0));
-  check('Mobile uses the smaller photographic export', await m.$eval('#opening-film-video', v => v.currentSrc.endsWith('intro-photographic-v2-mobile.mp4') && v.videoWidth === 1280));
+  check('Mobile uses the smaller photographic export', await m.$eval('#opening-film-video', v => v.currentSrc.endsWith('intro-photographic-v3-mobile.mp4') && v.videoWidth === 1280));
   check('Mobile page has no horizontal overflow', await m.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await m.screenshot({ path: 'tmp/intro-qa/mobile.png' }); await mobile.close();
 
@@ -64,14 +64,14 @@ try {
   check('Reduced motion skips the automatic opening gate', await r.locator('#cinema-intro').isHidden()); await reduced.close();
 
   const failed = await browser.newContext(); const f = await failed.newPage();
-  await f.route('**/assets/intro-photographic-v2*.mp4', route => route.abort());
+  await f.route('**/assets/intro-photographic-v3*.mp4', route => route.abort());
   await f.goto(base); await f.click('#enter-sound');
   await f.waitForFunction(() => /unavailable|could not play/.test(document.querySelector('#entrance-status').textContent));
   check('Missing media shows a recoverable error and a visible gate', await f.locator('#film-gate').isVisible());
   await f.click('#skip-intro'); await f.waitForFunction(() => document.querySelector('#cinema-intro').hidden);
   check('A failed video never traps the visitor', await f.$eval('#room', e => !e.inert)); await failed.close();
   const slow = await browser.newContext(); const s = await slow.newPage();
-  await s.route('**/assets/intro-photographic-v2*.mp4', async route => { await new Promise(resolve => setTimeout(resolve, 900)); await route.continue(); });
+  await s.route('**/assets/intro-photographic-v3*.mp4', async route => { await new Promise(resolve => setTimeout(resolve, 900)); await route.continue(); });
   await s.goto(base); await s.click('#enter-sound'); await s.click('#skip-intro');
   await s.waitForFunction(() => document.querySelector('#cinema-intro').hidden);
   await s.click('#replay-intro'); await s.click('#enter-silent');

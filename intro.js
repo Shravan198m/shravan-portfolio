@@ -12,7 +12,7 @@
   const video = document.createElement('video');
   video.id = 'opening-film-video'; video.className = 'opening-film-video';
   video.preload = 'none'; video.playsInline = true;
-  video.poster = '/assets/intro-photographic-v2-poster.jpg';
+  video.poster = '/assets/intro-photographic-v3-poster.jpg';
   video.setAttribute('aria-label', 'Photographic opening: rainy house exterior, vintage kitchen, and original television room');
   intro.prepend(video);
   const cues = [
@@ -24,7 +24,7 @@
     [27, 29.4, 'Welcome to my world.']
   ];
   let running = false, starting = false, frame, finishTimer, attempt = 0;
-  const seen = () => { try { return sessionStorage.getItem('svm-story-v5'); } catch { return false; } };
+  const seen = () => { try { return sessionStorage.getItem('svm-story-v6'); } catch { return false; } };
   function update() {
     const time = video.currentTime;
     intro.style.setProperty('--progress', Math.min(time / 30, 1));
@@ -43,7 +43,7 @@
     cancelAnimationFrame(frame); clearTimeout(finishTimer);
     video.pause(); window.PortfolioAudio?.stop(); room.inert = false;
     intro.classList.add('departing');
-    try { sessionStorage.setItem('svm-story-v5', '1'); } catch {}
+    try { sessionStorage.setItem('svm-story-v6', '1'); } catch {}
     finishTimer = setTimeout(() => {
       intro.hidden = true; intro.classList.remove('departing');
       document.querySelector('.channel-button[aria-pressed=true]')?.focus({ preventScroll: true });
@@ -55,7 +55,7 @@
     window.PortfolioAudio?.stop();
     if (!video.getAttribute('src')) {
       const compact = matchMedia('(max-width: 760px)').matches || navigator.connection?.saveData;
-      video.src = compact ? '/assets/intro-photographic-v2-mobile.mp4' : '/assets/intro-photographic-v2.mp4';
+      video.src = compact ? '/assets/intro-photographic-v3-mobile.mp4' : '/assets/intro-photographic-v3.mp4';
     }
     video.currentTime = 0; video.muted = !sound; video.volume = 1; soundLabel();
     status.textContent = 'LOADING THE OPENING FILM…';
